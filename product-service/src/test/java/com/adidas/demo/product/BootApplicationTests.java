@@ -1,4 +1,4 @@
-package com.adidas.demo.productservice;
+package com.adidas.demo.product;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
