@@ -1,5 +1,8 @@
 package com.adidas.demo.productreview.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.EntityNotFoundException;
 
 import org.springframework.cache.annotation.CacheEvict;
@@ -7,6 +10,7 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import com.adidas.demo.productreview.dto.ProductReviewData;
 import com.adidas.demo.productreview.entity.ProductReview;
 import com.adidas.demo.productreview.repository.ProductReviewRepository;
 
@@ -25,6 +29,13 @@ public class ProductReviewService {
 	@Cacheable("productReviews")
 	public ProductReview get(String productId) {
 		return repository.findById(productId).orElseThrow(() -> new EntityNotFoundException(productId));
+	}
+	
+
+	public ProductReviewData getAll() {
+		List<ProductReview> data = new ArrayList<>(); 
+		repository.findAll().forEach(data::add);
+		return ProductReviewData.builder().data(data).build();
 	}
 
 	public ProductReview save(ProductReview productReview) {

@@ -5,6 +5,8 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.Before;
@@ -15,6 +17,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import com.adidas.demo.productreview.dto.ProductReviewData;
 import com.adidas.demo.productreview.entity.ProductReview;
 import com.adidas.demo.productreview.repository.ProductReviewRepository;
 import com.adidas.demo.productreview.utils.TestUtilsFactory;
@@ -39,6 +42,20 @@ public class ProductReviewServiceTests {
 		ProductReview actual = testClass.get(expected.getProductId());
 		
 		assertThat(actual.getAverageReviewScore()).isEqualTo(expected.getAverageReviewScore());
+	}
+	
+	@Test
+	public void whenAllProductReviewsAreObtained_thenReturnProductReviewData() {
+		List<ProductReview> list = new ArrayList<>();
+		list.add(TestUtilsFactory.getProductReview());
+		list.add(TestUtilsFactory.getProductReview());
+		list.add(TestUtilsFactory.getProductReview());
+		int expected = 3;
+		given(repository.findAll()).willReturn(list);
+		
+		ProductReviewData actual = testClass.getAll();
+		
+		assertThat(actual.getData().size()).isEqualTo(expected);
 	}
 	
 	@Test

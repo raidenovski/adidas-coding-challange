@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.adidas.demo.productreview.dto.ProductReviewData;
 import com.adidas.demo.productreview.entity.ProductReview;
 import com.adidas.demo.productreview.service.ProductReviewService;
 
@@ -31,6 +32,12 @@ public class ProductReviewController {
 	public ProductReview get(@PathVariable("product_id") String productId) {
 		log.info("Handle request: get with id {}");
 		return service.get(productId);
+	}
+	
+	@GetMapping("/getAll")
+	public ProductReviewData getAll() {
+		log.info("Handle request: get all product reviews");
+		return service.getAll();
 	}
 	
 	@PostMapping("/")
