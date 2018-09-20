@@ -6,7 +6,9 @@ all: test build run
 .PHONY: test
 test: 
 	@echo "Testing product-review..."
-	@mvn clean test -f ./product-review/pom.xml
+#	@mvn test -f ./product-review/pom.xml
+	@echo "Testing product-service..."
+	@mvn test -f ./product-service/pom.xml
 
 # builds docker images for both projects
 .PHONY: build
