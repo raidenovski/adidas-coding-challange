@@ -2,6 +2,7 @@ package com.adidas.demo.productreview.controller;
 
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -30,7 +31,8 @@ public class ProductReviewExceptionHandlerTests {
 	public void givenInvalidProductId_whenHandlingRequest_thenReturnErrorMessage() throws Exception {
 		given(service.get(anyString())).willThrow(new EntityNotFoundException());
 		
-		mockMvc.perform(get("/review/C123"))
+		mockMvc.perform(get("/review/C123")
+				.with(user("adidas").password("rocks")))
 		.andExpect(status().isNotFound());
 	}
 }

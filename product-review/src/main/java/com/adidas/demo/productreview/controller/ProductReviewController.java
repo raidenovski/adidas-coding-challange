@@ -30,7 +30,7 @@ public class ProductReviewController {
 	
 	@GetMapping("/{product_id}")
 	public ProductReview get(@PathVariable("product_id") String productId) {
-		log.info("Handle request: get with id {}");
+		log.info("Handle request: get with id {}", productId);
 		return service.get(productId);
 	}
 	

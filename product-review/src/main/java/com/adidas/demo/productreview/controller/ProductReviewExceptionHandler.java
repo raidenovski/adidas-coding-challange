@@ -18,6 +18,7 @@ public class ProductReviewExceptionHandler extends ResponseEntityExceptionHandle
 
 	@ExceptionHandler(EntityNotFoundException.class)
 	protected ResponseEntity<Object> handleResourceNotFound(RuntimeException re, WebRequest request) {
-		return handleExceptionInternal(re, "hello world!!!!!", new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+		return handleExceptionInternal(re, "Could not find review with id " + re.getMessage(), new HttpHeaders(), HttpStatus.NOT_FOUND, request);
 	}
+	
 }
