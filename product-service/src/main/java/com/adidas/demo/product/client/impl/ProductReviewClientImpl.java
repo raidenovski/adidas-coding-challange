@@ -1,4 +1,4 @@
-package com.adidas.demo.product.client;
+package com.adidas.demo.product.client.impl;
 
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
+import com.adidas.demo.product.client.ProductClient;
 import com.adidas.demo.product.dto.ProductReview;
 
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @Slf4j
 public class ProductReviewClientImpl implements ProductClient<ProductReview> {
-
+	
 	private RestTemplate restTemplate;
 	
 	public ProductReviewClientImpl(RestTemplate restTemplate) {

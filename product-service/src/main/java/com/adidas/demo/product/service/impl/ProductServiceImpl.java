@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.adidas.demo.product.client.ProductClient;
-import com.adidas.demo.product.client.ProductClientImpl;
+import com.adidas.demo.product.client.impl.ProductClientImpl;
 import com.adidas.demo.product.dto.Product;
 import com.adidas.demo.product.service.ProductService;
 
@@ -24,6 +24,7 @@ public class ProductServiceImpl implements ProductService<Product> {
 	
 	@Override
 	public Product get(String id) {
+		log.info("Get Product with id {}", id);
 		return client.getResourceFromUrl(productApiUrlTemplate, id);
 	}
 

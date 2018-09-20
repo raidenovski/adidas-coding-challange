@@ -1,4 +1,4 @@
-package com.adidas.demo.product.client;
+package com.adidas.demo.product.client.impl;
 
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
+import com.adidas.demo.product.client.ProductClient;
 import com.adidas.demo.product.dto.Product;
 
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +22,7 @@ public class ProductClientImpl implements ProductClient<Product> {
 	}
 	
 	@Override
-	public Product getResourceFromUrl(String urlTemplate, String id) {
+	public Product getResourceFromUrl(String urlTemplate, String id){
 		try {
 			ResponseEntity<Product> response = restTemplate.exchange(urlTemplate, HttpMethod.GET, null, Product.class, id);
 			return response.getBody();
@@ -30,5 +31,4 @@ public class ProductClientImpl implements ProductClient<Product> {
 			return null; // TODO throw custom exception
 		}
 	}
-
 }

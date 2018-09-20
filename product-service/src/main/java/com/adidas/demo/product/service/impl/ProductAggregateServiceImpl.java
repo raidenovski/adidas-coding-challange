@@ -24,9 +24,9 @@ public class ProductAggregateServiceImpl implements ProductService<ProductAggreg
 	
 	@Override
 	public ProductAggregate get(String id) {
-		Product product = productService.get(id);
 		ProductReview productReview = productReviewService.get(id);
-		
+		Product product = productService.get(id);
+	
 		return ProductAggregate.builder()
 				.product(product)
 				.productReview(productReview)
