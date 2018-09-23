@@ -39,7 +39,7 @@ public class TestUtilsFactory {
 				.id(PRODUCT_ID)
 				.modelNumber(MODEL_NUM)
 				.productType(PRODUCT_TYPE)
-				.metaData("Some meta data")
+				.metaData(null)
 				.build();
 	}
 	

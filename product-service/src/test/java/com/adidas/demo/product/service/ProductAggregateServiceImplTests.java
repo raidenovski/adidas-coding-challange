@@ -13,6 +13,9 @@ import org.mockito.junit.MockitoJUnitRunner;
 import com.adidas.demo.product.dto.Product;
 import com.adidas.demo.product.dto.ProductAggregate;
 import com.adidas.demo.product.dto.ProductReview;
+import com.adidas.demo.product.exception.AggregateComponentNotFoundException;
+import com.adidas.demo.product.exception.AggregateComponentNotFoundException.AggregateComponent;
+import com.adidas.demo.product.exception.PartialAggregateException;
 import com.adidas.demo.product.service.impl.ProductAggregateServiceImpl;
 import com.adidas.demo.product.service.impl.ProductReviewServiceImpl;
 import com.adidas.demo.product.service.impl.ProductServiceImpl;
@@ -43,5 +46,15 @@ public class ProductAggregateServiceImplTests {
 		
 		assertThat(actual.getProduct().getModelNumber()).isEqualTo(product.getModelNumber());
 		assertThat(actual.getProductReview().getAverageReviewScore()).isEqualTo(productReview.getAverageReviewScore());
+	}
+	
+	@Test(expected = PartialAggregateException.class)
+	public void givenValidProductId_whenNotAbleToGetProductReview_thenThrowPartialAggregateException() {
+		Product product = TestUtilsFactory.getProduct();
+		given(productService.get(anyString())).willReturn(product);
+		given(productReviewService.get(anyString()))
+			.willThrow(new AggregateComponentNotFoundException("Could not get connection",AggregateComponent.REVIEW));
+		
+		testClass.get(product.getId());
 	}
 }

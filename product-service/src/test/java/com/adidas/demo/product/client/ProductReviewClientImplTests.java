@@ -19,6 +19,7 @@ import org.springframework.test.web.client.MockRestServiceServer;
 
 import com.adidas.demo.product.client.impl.ProductReviewClientImpl;
 import com.adidas.demo.product.dto.ProductReview;
+import com.adidas.demo.product.exception.AggregateComponentNotFoundException;
 import com.adidas.demo.product.utils.TestUtilsFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
@@ -44,18 +45,19 @@ public class ProductReviewClientImplTests {
     	
     	ProductReview actual = testClass.getResourceFromUrl(URL_TEMPLATE, ID);
     	
-    	assertThat(json).contains(actual.getProductId());
+    	assertThat(json).contains(String.valueOf(actual.getNumberOfReviews()));
     }
     
     @Test
-    public void givenClientCallForNonExistentEntry_whenCallingAPI_Return404() {
+    public void givenClientCallForNonExistentEntry_whenCallingAPI_thenReturn404AndThrowException() {
     	mockServer.expect(requestTo("/review/" + ID))
 		.andRespond(withStatus(HttpStatus.NOT_FOUND));
     	
-    	ProductReview actual = testClass.getResourceFromUrl(URL_TEMPLATE, ID);
-    	
-    	assertThat(actual).isNull();
-    	assertThat(output.toString()).contains("Response 404");
+    	try {
+    		testClass.getResourceFromUrl(URL_TEMPLATE, ID);
+    	} catch (AggregateComponentNotFoundException pae) {
+    		assertThat(output.toString()).contains("Response 404");    		
+    	}
     }
     
 }

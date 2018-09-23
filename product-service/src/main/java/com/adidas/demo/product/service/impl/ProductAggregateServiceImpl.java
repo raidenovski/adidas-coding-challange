@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import com.adidas.demo.product.dto.Product;
 import com.adidas.demo.product.dto.ProductAggregate;
 import com.adidas.demo.product.dto.ProductReview;
+import com.adidas.demo.product.exception.AggregateComponentNotFoundException;
+import com.adidas.demo.product.exception.PartialAggregateException;
 import com.adidas.demo.product.service.ProductService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -23,9 +25,16 @@ public class ProductAggregateServiceImpl implements ProductService<ProductAggreg
 	}
 	
 	@Override
-	public ProductAggregate get(String id) {
-		ProductReview productReview = productReviewService.get(id);
+	public ProductAggregate get(String id) throws AggregateComponentNotFoundException {
+		ProductReview productReview = null;
+		
 		Product product = productService.get(id);
+		try {
+			productReview = productReviewService.get(id);
+		} catch (AggregateComponentNotFoundException acne) {
+			log.error("Could not get product review for product with id {}", id);
+			throw new PartialAggregateException("No reviews are available for this product at the moment", product);
+		}
 	
 		return ProductAggregate.builder()
 				.product(product)

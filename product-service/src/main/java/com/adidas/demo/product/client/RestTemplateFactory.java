@@ -12,32 +12,38 @@ import com.adidas.demo.product.config.HttpComponentsClientHttpRequestFactoryBasi
 
 @Component
 public class RestTemplateFactory implements FactoryBean<RestTemplate>, InitializingBean {
-  
+
 	@Value("${api.product-review.username}")
 	private String username;
 	@Value("${api.product-review.password}")
 	private String password;
+	@Value("${api.web.client.timeout:4000}")
+	private int timeout;
 	
-    private RestTemplate restTemplate;
- 
-    @Override
+	private RestTemplate restTemplate;
+
+	@Override
 	public RestTemplate getObject() {
-        return restTemplate;
-    }
-    @Override
+		return restTemplate;
+	}
+
+	@Override
 	public Class<RestTemplate> getObjectType() {
-        return RestTemplate.class;
-    }
-    @Override
+		return RestTemplate.class;
+	}
+
+	@Override
 	public boolean isSingleton() {
-        return true;
-    }
- 
-    @Override
+		return true;
+	}
+
+	@Override
 	public void afterPropertiesSet() {
         HttpHost host = new HttpHost("localhost", 8081, "http");
-        restTemplate = new RestTemplate(
-          new HttpComponentsClientHttpRequestFactoryBasicAuth(host));
+        HttpComponentsClientHttpRequestFactoryBasicAuth requestFactory = new HttpComponentsClientHttpRequestFactoryBasicAuth(host);
+        requestFactory.setReadTimeout(timeout);
+        requestFactory.setConnectTimeout(timeout);
+        restTemplate = new RestTemplate(requestFactory);
         restTemplate.getInterceptors().add(new BasicAuthorizationInterceptor(username, password));
-    }
+	}
 }

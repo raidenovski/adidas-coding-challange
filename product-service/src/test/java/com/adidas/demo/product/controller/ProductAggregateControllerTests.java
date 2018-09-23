@@ -14,7 +14,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.adidas.demo.product.dto.Product;
 import com.adidas.demo.product.dto.ProductAggregate;
+import com.adidas.demo.product.exception.PartialAggregateException;
 import com.adidas.demo.product.service.impl.ProductAggregateServiceImpl;
 import com.adidas.demo.product.utils.TestUtilsFactory;
 
@@ -36,6 +38,20 @@ public class ProductAggregateControllerTests {
 		mockMvc.perform(get("/product/" + expected.getProduct().getId()))
 		.andExpect(status().isOk())
 		.andExpect(jsonPath("$.product").exists())
-		.andExpect(jsonPath("$.productReview.productId").exists());
+		.andExpect(jsonPath("$.product.id").exists());
+	}
+	
+	@Test
+	public void givenProductId_whenNotAbleToGetReview_thenReturnPartialProductAggregate() throws Exception {
+		
+		Product expected = TestUtilsFactory.getProduct();
+		
+		given(service.get(anyString()))
+			.willThrow(new PartialAggregateException("Review not available at the moment", expected));
+		
+		mockMvc.perform(get("/product/" + expected.getId()))
+		.andExpect(status().isOk())
+		.andExpect(jsonPath("$.product").exists())
+		.andExpect(jsonPath("$.message").exists());
 	}
 }
